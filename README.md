@@ -112,6 +112,8 @@ Pas de JWT dans ce MVP. Les endpoints sont ouverts en local.
 
 Si `API_KEY` est défini dans `.env`, envoyer l’en-tête `X-API-Key`.
 
+CORS : `CORS_ORIGINS` dans `.env`. `*` autorise toutes les origines. Sinon, liste d’URLs séparées par des virgules (ex. `http://localhost:5173`).
+
 Aucun mot de passe n’est stocké.
 
 ## WhatsApp

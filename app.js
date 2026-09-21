@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const swaggerUi = require('swagger-ui-express');
 const api = require('./api');
 const swaggerSpec = require('./config/swagger');
+const { corsOptions } = require('./config/cors');
 const optionalApiKey = require('./middlewares/optionalApiKey');
 const { notFound, errorHandler } = require('./middlewares/errorHandler');
 const { uploadDir } = require('./middlewares/upload');
@@ -16,10 +17,7 @@ function createApp() {
     contentSecurityPolicy: false,
     crossOriginResourcePolicy: { policy: 'cross-origin' },
   }));
-  app.use(cors({
-    origin: true,
-    credentials: true,
-  }));
+  app.use(cors(corsOptions()));
   app.use(express.json());
   app.use('/uploads', express.static(path.resolve(uploadDir()), {
     setHeaders: (res) => {
