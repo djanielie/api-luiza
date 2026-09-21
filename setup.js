@@ -19,6 +19,7 @@ const {
   Attachment,
 } = require('./modele');
 const { ensureDatabase } = require('./config/ensureDatabase');
+const { ensureUserAuthColumns } = require('./config/ensureUserAuth');
 const { nextCode } = require('./services/sequenceService');
 const { formatWhatsAppAlert } = require('./vue/alertMessage');
 
@@ -28,6 +29,7 @@ const SITE_B = 'Luiza Centre';
 async function setup() {
   await ensureDatabase();
   await sequelize.authenticate();
+  await ensureUserAuthColumns();
   await sequelize.sync();
 
   const already = await Site.findOne({ where: { name: SITE_A } });
@@ -39,8 +41,34 @@ async function setup() {
 
   const inspector = await User.create({
     name: 'Jean Inspecteur',
+    username: 'inspecteur',
+    password: 'Demo123!',
     phone: '+243810000001',
     role: 'INSPECTOR',
+  });
+
+  await User.create({
+    name: 'Marie Responsable',
+    username: 'responsable',
+    password: 'Demo123!',
+    phone: '+243810000002',
+    role: 'RESPONSIBLE',
+  });
+
+  await User.create({
+    name: 'Admin Démo',
+    username: 'admin',
+    password: 'Demo123!',
+    phone: '+243810000003',
+    role: 'ADMIN',
+  });
+
+  await User.create({
+    name: 'Reporter terrain',
+    username: 'reporter',
+    password: 'Demo123!',
+    phone: '+243810000004',
+    role: 'REPORTER',
   });
 
   const kaseba = await Site.create({
@@ -151,7 +179,7 @@ async function setup() {
 
   console.log('Setup terminé (base non vidée).');
   console.log(`Sites : ${kaseba.name}, ${centre.name}`);
-  console.log(`User ${inspector.id}`);
+  console.log('Comptes : admin / inspecteur / responsable / reporter  (mot de passe Demo123!)');
   console.log(`Inspection ${inspection.code} | Report ${report.code} | Risk ${risk.code}`);
   console.log(`Action ${action.id} | Alert ${alert.code} | Attachment ${attachment.id}`);
   await sequelize.close();

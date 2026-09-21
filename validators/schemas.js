@@ -146,8 +146,20 @@ const attachmentCreate = z.object({
 
 const userCreate = z.object({
   name: z.string().min(1),
+  username: z.string().min(3),
+  password: z.string().min(6),
   phone: z.string().optional().nullable(),
   role: z.enum(USER_ROLES).optional(),
+  isActive: z.boolean().optional(),
+});
+
+const userUpdate = z.object({
+  name: z.string().min(1).optional(),
+  username: z.string().min(3).optional(),
+  password: z.string().min(6).optional(),
+  phone: z.string().optional().nullable(),
+  role: z.enum(USER_ROLES).optional(),
+  isActive: z.boolean().optional(),
 });
 
 module.exports = {
@@ -166,4 +178,5 @@ module.exports = {
   alertCreate,
   attachmentCreate,
   userCreate,
+  userUpdate,
 };

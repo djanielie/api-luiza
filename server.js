@@ -5,6 +5,8 @@ const createApp = require('./app');
 const { ensureUploadDir } = require('./middlewares/upload');
 const { ensureDatabase } = require('./config/ensureDatabase');
 
+const { ensureUserAuthColumns } = require('./config/ensureUserAuth');
+
 const PORT = process.env.PORT || 3000;
 const app = createApp();
 
@@ -13,6 +15,7 @@ async function start() {
     ensureUploadDir();
     await ensureDatabase();
     await sequelize.authenticate();
+    await ensureUserAuthColumns();
     await sequelize.sync();
     const server = app.listen(PORT, () => {
       console.log(`LUIZA MINING SAFE API sur le port ${PORT}`);

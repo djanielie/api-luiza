@@ -3,6 +3,9 @@ const ctrl = require('../controllers/siteController');
 const validate = require('../middlewares/validate');
 const { siteCreate, siteUpdate } = require('../validators/schemas');
 
+const { ROLES, SITE_WRITERS } = require('../constants/roles');
+const { requireRoles } = require('../middlewares/auth');
+
 const router = express.Router();
 
 /**
@@ -20,8 +23,8 @@ const router = express.Router();
  */
 router.get('/', ctrl.list);
 router.get('/:id', ctrl.get);
-router.post('/', validate(siteCreate), ctrl.create);
-router.put('/:id', validate(siteUpdate), ctrl.update);
-router.delete('/:id', ctrl.remove);
+router.post('/', requireRoles(...SITE_WRITERS), validate(siteCreate), ctrl.create);
+router.put('/:id', requireRoles(...SITE_WRITERS), validate(siteUpdate), ctrl.update);
+router.delete('/:id', requireRoles(ROLES.ADMIN), ctrl.remove);
 
 module.exports = router;

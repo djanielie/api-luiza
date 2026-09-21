@@ -1,0 +1,9 @@
+const MAX_FAILED_LOGINS = 10;
+const LOGIN_WARN_FROM_ATTEMPT = 5;
+const JWT_EXPIRES_IN = '2d';
+
+module.exports = {
+  MAX_FAILED_LOGINS,
+  LOGIN_WARN_FROM_ATTEMPT,
+  JWT_EXPIRES_IN,
+};

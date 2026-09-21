@@ -2,21 +2,31 @@ const asyncHandler = require('../utils/asyncHandler');
 const { success, created } = require('../vue/response');
 const dashboardService = require('../services/dashboardService');
 const attachmentService = require('../services/attachmentService');
-const { User } = require('../modele');
+const userService = require('../services/userService');
 
 exports.summary = asyncHandler(async (req, res) => {
-  const data = await dashboardService.getSummary();
+  const data = await dashboardService.getSummary(req.user);
   return success(res, data);
 });
 
 exports.listUsers = asyncHandler(async (req, res) => {
-  const data = await User.findAll({ order: [['name', 'ASC']] });
+  const data = await userService.listUsers();
+  return success(res, data);
+});
+
+exports.getUser = asyncHandler(async (req, res) => {
+  const data = await userService.getUser(req.params.id);
   return success(res, data);
 });
 
 exports.createUser = asyncHandler(async (req, res) => {
-  const data = await User.create(req.body);
+  const data = await userService.createUser(req.body);
   return created(res, data, 'Utilisateur créé');
+});
+
+exports.updateUser = asyncHandler(async (req, res) => {
+  const data = await userService.updateUser(req.params.id, req.body);
+  return success(res, data, 'Utilisateur mis à jour');
 });
 
 exports.listAttachments = asyncHandler(async (req, res) => {

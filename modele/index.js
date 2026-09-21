@@ -9,6 +9,7 @@ const CorrectiveAction = require('./correctiveAction');
 const Attachment = require('./attachment');
 const Alert = require('./alert');
 const Sequence = require('./sequence');
+const RevokedToken = require('./revokedToken');
 
 const models = {
   Site,
@@ -20,6 +21,7 @@ const models = {
   Attachment,
   Alert,
   Sequence,
+  RevokedToken,
 };
 
 Object.values(models).forEach((model) => {

@@ -3,6 +3,9 @@ const ctrl = require('../controllers/reportController');
 const validate = require('../middlewares/validate');
 const { reportCreate, reportStatus, convertToRisk } = require('../validators/schemas');
 
+const { requireRoles } = require('../middlewares/auth');
+const { STAFF, RISK_MANAGERS, REPORTERS } = require('../constants/roles');
+
 const router = express.Router();
 
 /**
@@ -28,8 +31,8 @@ const router = express.Router();
  */
 router.get('/', ctrl.list);
 router.get('/:id', ctrl.get);
-router.post('/', validate(reportCreate), ctrl.create);
-router.patch('/:id/status', validate(reportStatus), ctrl.updateStatus);
-router.post('/:id/convert-to-risk', validate(convertToRisk), ctrl.convertToRisk);
+router.post('/', requireRoles(...REPORTERS), validate(reportCreate), ctrl.create);
+router.patch('/:id/status', requireRoles(...STAFF), validate(reportStatus), ctrl.updateStatus);
+router.post('/:id/convert-to-risk', requireRoles(...RISK_MANAGERS), validate(convertToRisk), ctrl.convertToRisk);
 
 module.exports = router;

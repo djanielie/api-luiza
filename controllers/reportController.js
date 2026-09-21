@@ -4,17 +4,17 @@ const reportService = require('../services/reportService');
 const riskService = require('../services/riskService');
 
 exports.list = asyncHandler(async (req, res) => {
-  const data = await reportService.listReports(req.query);
+  const data = await reportService.listReports(req.query, req.user);
   return success(res, data);
 });
 
 exports.get = asyncHandler(async (req, res) => {
-  const data = await reportService.getReport(req.params.id);
+  const data = await reportService.getReport(req.params.id, req.user);
   return success(res, data);
 });
 
 exports.create = asyncHandler(async (req, res) => {
-  const data = await reportService.createReport(req.body);
+  const data = await reportService.createReport(req.body, req.user);
   return created(res, data, 'Signalement créé');
 });
 

@@ -34,17 +34,17 @@ async function seed() {
   console.log('Base recréée (force: true).');
 
   const users = await User.bulkCreate([
-    { name: 'Jean Inspecteur', phone: '+243810000001', role: 'INSPECTOR' },
-    { name: 'Marie Responsable', phone: '+243810000002', role: 'RESPONSIBLE' },
-    { name: 'Admin Démo', phone: '+243810000003', role: 'ADMIN' },
-    { name: 'Reporter terrain', phone: '+243810000004', role: 'REPORTER' },
-    { name: 'Patrick Inspecteur', phone: '+243810000005', role: 'INSPECTOR' },
-    { name: 'Grace Sécurité', phone: '+243810000006', role: 'RESPONSIBLE' },
-    { name: 'David Reporter', phone: '+243810000007', role: 'REPORTER' },
-    { name: 'Chantal Inspectrice', phone: '+243810000008', role: 'INSPECTOR' },
-    { name: 'Joseph Chef de chantier', phone: '+243810000009', role: 'RESPONSIBLE' },
-    { name: 'Esther Observatrice', phone: '+243810000010', role: 'REPORTER' },
-  ]);
+    { name: 'Jean Inspecteur', username: 'inspecteur', password: 'Demo123!', phone: '+243810000001', role: 'INSPECTOR' },
+    { name: 'Marie Responsable', username: 'responsable', password: 'Demo123!', phone: '+243810000002', role: 'RESPONSIBLE' },
+    { name: 'Admin Démo', username: 'admin', password: 'Demo123!', phone: '+243810000003', role: 'ADMIN' },
+    { name: 'Reporter terrain', username: 'reporter', password: 'Demo123!', phone: '+243810000004', role: 'REPORTER' },
+    { name: 'Patrick Inspecteur', username: 'inspecteur2', password: 'Demo123!', phone: '+243810000005', role: 'INSPECTOR' },
+    { name: 'Grace Sécurité', username: 'responsable2', password: 'Demo123!', phone: '+243810000006', role: 'RESPONSIBLE' },
+    { name: 'David Reporter', username: 'reporter2', password: 'Demo123!', phone: '+243810000007', role: 'REPORTER' },
+    { name: 'Chantal Inspectrice', username: 'inspecteur3', password: 'Demo123!', phone: '+243810000008', role: 'INSPECTOR' },
+    { name: 'Joseph Chef de chantier', username: 'responsable3', password: 'Demo123!', phone: '+243810000009', role: 'RESPONSIBLE' },
+    { name: 'Esther Observatrice', username: 'reporter3', password: 'Demo123!', phone: '+243810000010', role: 'REPORTER' },
+  ], { individualHooks: true });
   const [inspector, responsible, , reporter, inspector2, responsible2, reporter2, inspector3, responsible3, reporter3] = users;
 
   const sites = await Site.bulkCreate([
@@ -597,7 +597,7 @@ async function seed() {
   console.log('Seed terminé (~10 lignes par entité).');
   console.log(`Users ${users.length} | Sites ${sites.length} | Inspections ${inspections.length}`);
   console.log(`Reports ${reports.length} | Risks ${risks.length} | Actions 10 | Alerts 10 | Attachments 10`);
-  console.log(`Risque critique démo: ${risks[0].code} (IN_PROGRESS) — site ${kaseba.name}`);
+  console.log('Comptes : admin / inspecteur / responsable / reporter  (mot de passe Demo123!)');
   await sequelize.close();
 }
 

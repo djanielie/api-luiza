@@ -1,8 +1,12 @@
 const { Op } = require('sequelize');
 const { Site, Risk, Report, CorrectiveAction } = require('../modele');
+const { ROLES } = require('../constants/roles');
 
-async function getSummary() {
+async function getSummary(user) {
   const now = new Date();
+  const reportWhere = user?.role === ROLES.REPORTER ? { reporterId: user.id } : {};
+  const staff = user?.role !== ROLES.REPORTER;
+
   const [
     sites,
     openRisks,
@@ -13,17 +17,19 @@ async function getSummary() {
     closedRisks,
   ] = await Promise.all([
     Site.count({ where: { status: 'ACTIVE' } }),
-    Risk.count({ where: { status: { [Op.in]: ['OPEN', 'IN_PROGRESS'] } } }),
-    Risk.count({ where: { priority: 'CRITICAL', status: { [Op.ne]: 'CLOSED' } } }),
-    Report.count({ where: { status: { [Op.in]: ['RECEIVED', 'REVIEWED'] } } }),
-    CorrectiveAction.count({ where: { status: { [Op.in]: ['PENDING', 'IN_PROGRESS'] } } }),
-    CorrectiveAction.count({
-      where: {
-        status: { [Op.in]: ['PENDING', 'IN_PROGRESS'] },
-        dueDate: { [Op.lt]: now },
-      },
-    }),
-    Risk.count({ where: { status: 'CLOSED' } }),
+    staff ? Risk.count({ where: { status: { [Op.in]: ['OPEN', 'IN_PROGRESS'] } } }) : Promise.resolve(0),
+    staff ? Risk.count({ where: { priority: 'CRITICAL', status: { [Op.ne]: 'CLOSED' } } }) : Promise.resolve(0),
+    Report.count({ where: { ...reportWhere, status: { [Op.in]: ['RECEIVED', 'REVIEWED'] } } }),
+    staff ? CorrectiveAction.count({ where: { status: { [Op.in]: ['PENDING', 'IN_PROGRESS'] } } }) : Promise.resolve(0),
+    staff
+      ? CorrectiveAction.count({
+        where: {
+          status: { [Op.in]: ['PENDING', 'IN_PROGRESS'] },
+          dueDate: { [Op.lt]: now },
+        },
+      })
+      : Promise.resolve(0),
+    staff ? Risk.count({ where: { status: 'CLOSED' } }) : Promise.resolve(0),
   ]);
 
   return {
